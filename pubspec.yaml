@@ -1,0 +1,81 @@
+name: flutter_travel_guide_dashborad
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.3 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  image_picker: ^0.8.9
+  pretty_dio_logger: ^1.3.1
+  dio: ^5.2.1+1
+  fluttertoast: ^8.2.2
+  flutter_screenutil: ^5.8.4
+  responsive_framework: ^1.0.0
+  responsive_builder: ^0.7.0
+  sizer: ^2.0.15
+  fl_chart: ^0.63.0
+  flutter_html: ^3.0.0-beta.2
+  flutter_bloc: ^8.1.1
+  loader_overlay: ^2.2.0
+  url_launcher: ^6.1.12
+  string_to_color: ^2.0.0
+  flutter_linkify: ^6.0.0
+  flutter_switch: ^0.3.2
+  flutter_spinkit: ^5.2.0
+  flutter_quill: ^7.2.18
+  get_it: ^7.6.0
+  flutter_svg: ^2.0.7
+  uuid: ^3.0.7
+  cached_network_image: ^3.2.3
+  dartz: ^0.10.1
+  shimmer: ^3.0.0
+  responsive_sizer: ^3.1.1
+  carousel_slider: ^4.2.1
+  easy_sidemenu: ^0.5.0
+  currency_picker: ^2.0.16
+  flutter_staggered_grid_view: ^0.7.0
+  photo_view: ^0.14.0
+  font_awesome_flutter: ^10.5.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/user_avatar/
+  fonts:
+    - family: DMSans-Bold
+      fonts:
+        - asset: assets/fonts/IndieFlower-Regular.ttf
+    - family: Kalam
+      fonts:
+        - asset: assets/fonts/Kalam-Regular.ttf
+    - family: JosefinSans
+      fonts:
+        - asset: assets/fonts/JosefinSans-VariableFont_wght.ttf
+  #     - family: DMSans-Medium
+  #       fonts:
+  #         - asset: asset/fonts/DMSans-Medium.ttf
+  #     - family: DMSans-Regular
+  #       fonts:
+  #         - asset: asset/fonts/DMSans-Regular.ttf
