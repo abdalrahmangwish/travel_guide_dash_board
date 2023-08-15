@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
@@ -248,6 +247,5 @@ class _UserItemState extends State<UserItem> {
         ),
       ),
     );
-    ;
   }
 }

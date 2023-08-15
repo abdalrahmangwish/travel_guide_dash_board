@@ -1,11 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
-import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
-import 'package:flutter_travel_guide_dashborad/core/global_widget/global_widget.dart';
-import 'package:flutter_travel_guide_dashborad/core/responsive/responsive.dart';
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/widget/home_page_widgets.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,6 +10,7 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
+
 final CarouselOptions options = CarouselOptions(
   autoPlay: false,
   enlargeCenterPage: true,
@@ -25,25 +21,25 @@ final CarouselOptions options = CarouselOptions(
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-        body: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 6,
-                  child: Container(
-                    height: double.infinity,
-                    decoration:
-                    BoxDecoration(gradient: Constant.primaryBodyColor),
-                    child: Padding(
-                      padding: EdgeInsets.all(Constant.defaultPadding),
-                      child: Container(
+    return Scaffold(
+      body: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+                flex: 6,
+                child: Container(
+                  height: double.infinity,
+                  decoration:
+                      BoxDecoration(gradient: Constant.primaryBodyColor),
+                  child: Padding(
+                    padding: EdgeInsets.all(Constant.defaultPadding),
+                    child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.5), // Shadow color
+                              color:
+                                  Colors.black.withOpacity(0.5), // Shadow color
                               spreadRadius: 1,
                               blurRadius: 7,
                               offset: const Offset(0, 1),
@@ -54,29 +50,28 @@ class _MainPageState extends State<MainPage> {
                         ),
                         width: MediaQuery.of(context).size.width * 0.7,
                         height: double.infinity,
-                        child:ListView.builder(itemBuilder: (context, index) => ItemBuilderAds(),
+                        child: ListView.builder(
+                          itemBuilder: (context, index) => ItemBuilderAds(),
                           itemCount: 2,
-                        )
-                      ),
-                    ),
-                  )),
-            ],
-          ),
+                        )),
+                  ),
+                )),
+          ],
         ),
-      );
+      ),
+    );
   }
 }
-
 
 class ItemBuilderAds extends StatefulWidget {
   const ItemBuilderAds({
     Key? key,
   }) : super(key: key);
 
-
   @override
   State<ItemBuilderAds> createState() => _ItemBuilderAdsState();
 }
+
 class _ItemBuilderAdsState extends State<ItemBuilderAds> {
   List<String> images = [
     'https://cdna.4imprint.com/qtz/homepage/categories/images21/drinkware0222.jpg',
@@ -87,8 +82,7 @@ class _ItemBuilderAdsState extends State<ItemBuilderAds> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Container(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       constraints: BoxConstraints(
@@ -146,22 +140,22 @@ class _ItemBuilderAdsState extends State<ItemBuilderAds> {
                         items: images
                             .map(
                               (e) => ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(e),
+                                borderRadius: BorderRadius.circular(10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(e),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        )
+                            )
                             .toList(),
                         options: options,
                       ),
@@ -187,5 +181,3 @@ class _ItemBuilderAdsState extends State<ItemBuilderAds> {
     );
   }
 }
-
-

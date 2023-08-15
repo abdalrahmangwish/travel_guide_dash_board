@@ -1,6 +1,6 @@
-
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_guide/presentation/add_guide.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/add_places.dart';
 import 'package:flutter_travel_guide_dashborad/feature/guide_profile/presentation/guide_profile.dart';
@@ -35,21 +35,21 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
         ),
       ),
       SideMenuItem(
-        title: 'Add Guide',
+        title: 'Add guide',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
-        icon: const Icon(Icons.person_add),
+        icon: const Icon(Icons.person_add_rounded),
       ),
       SideMenuItem(
-        title: 'Add Activity',
+        title: 'Add activity',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
-        icon: const Icon(Icons.add_a_photo_outlined),
+        icon: const Icon(Icons.add_photo_alternate_rounded),
       ),
       SideMenuItem(
-        title: 'User Profile',
+        title: 'User profile',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
@@ -63,7 +63,7 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
         icon: const Icon(Icons.supervised_user_circle_rounded),
       ),
       SideMenuItem(
-        title: 'FeedBack',
+        title: 'Feedback',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
@@ -90,6 +90,10 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
         children: [
           SideMenu(
             style: SideMenuStyle(
+              selectedTitleTextStyle:
+                  StylesText.newDefaultTextStyle.copyWith(color: Colors.black),
+              unselectedTitleTextStyle:
+                  StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
               displayMode: SideMenuDisplayMode.auto,
               openSideMenuWidth: 200,
               iconSize: 20,
@@ -109,18 +113,12 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
-              children:  [
+              children: const [
                 MainPage(),
                 AddGuide(),
                 AddPlaces(),
                 UserProfile(),
                 GuideProfile()
-                // MainPage(adsStatus: AppConstant.allAdsStatus),
-                // MainPage(adsStatus: AppConstant.pendingStatus),
-                // UserProfile(),
-                // AddAdsPage(update: false),
-                // UpdateAccountPage(),
-                // FeedBackPage(),
               ],
             ),
           ),

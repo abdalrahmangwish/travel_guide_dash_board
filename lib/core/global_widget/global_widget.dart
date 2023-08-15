@@ -246,20 +246,14 @@ class CustomAddTextField extends StatelessWidget {
         return valedate(val);
       },
       decoration: InputDecoration(
-        errorStyle: StylesText.defaultTextStyle.copyWith(color: Colors.red),
+        errorStyle: StylesText.newDefaultTextStyle.copyWith(color: Colors.red),
+        filled: true,
         hintText: label,
         border: InputBorder.none,
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(
-            color: Colors.black12,
-            width: 0,
-          ),
-        ),
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: Colors.red,
+            color: Colors.black38,
             width: 0,
           ),
         ),
@@ -270,13 +264,21 @@ class CustomAddTextField extends StatelessWidget {
             width: 0,
           ),
         ),
-        hintStyle: StylesText.defaultTextStyle,
+        errorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 0,
+          ),
+        ),
+        hintStyle: StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
         focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: Colors.black12,
-              width: 1,
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: Colors.black38,
+            width: 1,
+          ),
+        ),
       ),
     );
   }
@@ -312,14 +314,15 @@ class CustomDescriptionTextField extends StatelessWidget {
           return valedate(val);
         },
         decoration: InputDecoration(
-          errorStyle: StylesText.defaultTextStyle.copyWith(color: Colors.red),
+          errorStyle:
+              StylesText.newDefaultTextStyle.copyWith(color: Colors.red),
           filled: true,
           hintText: label,
           border: InputBorder.none,
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(
-              color: Colors.black12,
+              color: Colors.black38,
               width: 0,
             ),
           ),
@@ -337,11 +340,12 @@ class CustomDescriptionTextField extends StatelessWidget {
               width: 0,
             ),
           ),
-          hintStyle: StylesText.defaultTextStyle,
+          hintStyle:
+              StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(
-              color: Colors.black12,
+              color: Colors.black38,
               width: 1,
             ),
           ),

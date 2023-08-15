@@ -1,193 +1,364 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
+import 'package:flutter_travel_guide_dashborad/core/constant/enums.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
 import 'package:flutter_travel_guide_dashborad/core/global_widget/global_widget.dart';
-import 'package:flutter_travel_guide_dashborad/core/styles/style.dart';
+import 'package:flutter_travel_guide_dashborad/core/utils/utils.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/activity_model.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/city_models.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/blocs/activity_cubit/activity_cubit.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/blocs/upload_image_cubit/upload_image_cubit.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/add_activity_dialogs.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/add_place_widgets.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/create_place_attachment_widget.dart';
+import 'package:flutter_travel_guide_dashborad/service_locator.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
-class AddPlaces extends StatelessWidget {
-   AddPlaces({Key? key}) : super(key: key);
+class AddPlaces extends StatefulWidget {
+  const AddPlaces({Key? key}) : super(key: key);
+
+  @override
+  State<AddPlaces> createState() => _AddPlacesState();
+}
+
+class _AddPlacesState extends State<AddPlaces> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
-  final TextEditingController regionId = TextEditingController();
-  List<String>Images=[];
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    typeController.dispose();
+    descriptionController.dispose();
+    priceController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    sl<ActivityCubit>().initState();
+    super.initState();
+  }
+
+  List<CityModel> citiesList = [];
+  List<RegionModel> regionsList = [];
+  String? selectedCity;
+  String? selectedRegion;
+  var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-        body: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 6,
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitSpinningLines(
+          color: Colors.white,
+          size: 50.0,
+        ),
+      ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => UploadImageCubit()..initState([]),
+            ),
+          ],
+          child: Builder(builder: (context) {
+            return BlocListener(
+              bloc: sl<ActivityCubit>(),
+              listener: (context, state) {
+                if (state is AddActivityLoaded) {
+                  typeController.clear();
+                  nameController.clear();
+                  descriptionController.clear();
+                  priceController.clear();
+                  context.read<UploadImageCubit>().clearList();
+                  context.loaderOverlay.hide();
+                } else if (state is AddActivityError) {
+                  Utils.showCustomToast("error while adding");
+                  context.loaderOverlay.hide();
+                } else if (state is AddActivityLoading) {
+                  context.loaderOverlay.show();
+                }
+              },
+              child: Container(
+                height: double.infinity,
+                decoration: BoxDecoration(gradient: Constant.primaryBodyColor),
+                child: Padding(
+                  padding: EdgeInsets.all(Constant.defaultPadding),
                   child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5), // Shadow color
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.7,
                     height: double.infinity,
-                    decoration:
-                    BoxDecoration(gradient: Constant.primaryBodyColor),
-                    child: Padding(
-                      padding: EdgeInsets.all(Constant.defaultPadding),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.5), // Shadow color
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(0, 1),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomAddTextField(
+                                type: TextInputType.text,
+                                color: Colors.black,
+                                controllerName: nameController,
+                                label: "name",
+                                valedate: (String val) {
+                                  if (val.isEmpty) {
+                                    return "name must be not Empty";
+                                  }
+                                },
+                              ),
                             ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CreateActivityAttachmentSection(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomAddTextField(
+                                type: TextInputType.text,
+                                color: Colors.black,
+                                controllerName: typeController,
+                                label: "type",
+                                valedate: (String val) {
+                                  if (val.isEmpty) {
+                                    return "type must be not Empty";
+                                  }
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomDescriptionTextField(
+                                type: TextInputType.text,
+                                color: Colors.black,
+                                controllerName: descriptionController,
+                                label: "description",
+                                valedate: (String val) {
+                                  if (val.isEmpty) {
+                                    return "description must be not Empty";
+                                  }
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomAddTextField(
+                                type: TextInputType.text,
+                                color: Colors.black,
+                                controllerName: priceController,
+                                label: "price",
+                                valedate: (String val) {
+                                  if (val.isEmpty) {
+                                    return "price must be not Empty";
+                                  }
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder(
+                                      bloc: sl<ActivityCubit>(),
+                                      buildWhen: (previous, current) {
+                                        if (current is GetAllCityLoaded) {
+                                          citiesList = current.cities;
+                                          return true;
+                                        } else if (current is AddCityLoaded) {
+                                          if (current.model != null) {
+                                            citiesList.add(current.model!);
+                                            return true;
+                                          }
+                                        }
+                                        return false;
+                                      },
+                                      builder: (context, state) {
+                                        return DropDownTextField(
+                                          withAdd: true,
+                                          addClicked: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return const AddCityDialog();
+                                              },
+                                            );
+                                          },
+                                          selectedOption: selectedCity,
+                                          hintText: "city",
+                                          options: citiesList
+                                              .map((e) => e.name ?? "")
+                                              .toList(),
+                                          onChanged: (value) {
+                                            int index = citiesList.indexWhere(
+                                                (element) =>
+                                                    element.name == value);
+                                            if (index != -1) {
+                                              sl<ActivityCubit>().getRegionById(
+                                                citiesList[index].id ?? -1,
+                                              );
+                                            }
+                                            selectedCity = value;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: BlocBuilder(
+                                      bloc: sl<ActivityCubit>(),
+                                      buildWhen: (previous, current) {
+                                        if (current is GetAllCityLoaded) {
+                                          selectedRegion = null;
+                                          return true;
+                                        } else if (current is AddRegionLoaded) {
+                                          int index = citiesList.indexWhere(
+                                              (element) =>
+                                                  element.name == selectedCity);
+                                          if (index != -1) {
+                                            if (current.model?.id ==
+                                                current.cityId) {
+                                              if (current.model != null) {
+                                                regionsList.add(current.model!);
+                                                return true;
+                                              }
+                                            }
+                                          }
+                                        }
+                                        if (current is GetAllRegionLoaded) {
+                                          regionsList.clear();
+                                          selectedRegion = null;
+                                          regionsList = current.regions;
+                                          return true;
+                                        }
+                                        return false;
+                                      },
+                                      builder: (context, state) {
+                                        return DropDownTextField(
+                                          addClicked: () {
+                                            if (selectedCity != null) {
+                                              int index = citiesList.indexWhere(
+                                                  (element) =>
+                                                      element.name ==
+                                                      selectedCity);
+                                              if (index != -1) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AddRegionDialog(
+                                                      cityId: citiesList[index]
+                                                              .id ??
+                                                          -1,
+                                                    );
+                                                  },
+                                                );
+                                              }
+                                            }
+                                          },
+                                          withAdd: true,
+                                          selectedOption: selectedRegion,
+                                          hintText: "region",
+                                          options: regionsList
+                                              .map((e) => e.name ?? "")
+                                              .toList(),
+                                          onChanged: (value) {
+                                            selectedRegion = value;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  decoration: BoxDecoration(
+                                    gradient: Constant.primaryBodyColor,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: TextButton(
+                                    child: Text(
+                                      "Add",
+                                      style: StylesText.newDefaultTextStyle
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      if (selectedRegion == null) {
+                                        Utils.showCustomToast("select region");
+                                      } else if (context
+                                              .read<UploadImageCubit>()
+                                              .attachments
+                                              .indexWhere((element) =>
+                                                  element.attachmentState !=
+                                                  AttachmentState.completed) !=
+                                          -1) {
+                                        Utils.showCustomToast(
+                                          "all images must be uploaded",
+                                        );
+                                      } else if (formKey.currentState!
+                                          .validate()) {
+                                        int index = regionsList.indexWhere(
+                                            (element) =>
+                                                element.name == selectedRegion);
+                                        if (index != -1) {
+                                          sl<ActivityCubit>().addActivity(
+                                            AddActivityParamsModel(
+                                              name: nameController.text,
+                                              regionId:
+                                                  regionsList[index].id ?? -1,
+                                              type: typeController.text,
+                                              price: priceController.text,
+                                              description:
+                                                  descriptionController.text,
+                                              latitude: 0,
+                                              longitude: 0,
+                                              images: context
+                                                  .read<UploadImageCubit>()
+                                                  .attachments
+                                                  .map((e) => e.url ?? "")
+                                                  .toList(),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                )),
                           ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
                         ),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: double.infinity,
-                        child:SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  width:  MediaQuery.of(context).size.width,
-                                  constraints: BoxConstraints(
-                                    minHeight:  MediaQuery.of(context).size.height * 0.3,
-                                    maxHeight: MediaQuery.of(context).size.height * 0.4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Center(child: Text('this places to Add map')),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {  },
-                                child: Container(
-                                  height: MediaQuery.of(context).size.height*0.07,
-                                  constraints: BoxConstraints(
-                                    minWidth: MediaQuery.of(context).size.width*0.1
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.image_search_rounded,size: 30, color: Colors.black12,),
-                                      SizedBox(width: MediaQuery.of(context).size.width*0.0009,),
-                                      Text("Add Image ",style: StylesText.newDefaultTextStyle.copyWith(
-                                        color: Colors.grey
-                                      ),)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CustomAddTextField(
-                                  type: TextInputType.text,
-                                  color: Colors.black,
-                                  controllerName: nameController,
-                                  label: "name",
-                                  valedate: (String val) {
-                                    if (val.isEmpty) {
-                                      return "name must be not Empty";
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CustomAddTextField(
-                                  type: TextInputType.text,
-                                  color: Colors.black,
-                                  controllerName: typeController,
-                                  label: "type",
-                                  valedate: (String val) {
-                                    if (val.isEmpty) {
-                                      return "type must be not Empty";
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CustomAddTextField(
-                                  type: TextInputType.text,
-                                  color: Colors.black,
-                                  controllerName: descriptionController,
-                                  label: "description",
-                                  valedate: (String val) {
-                                    if (val.isEmpty) {
-                                      return "description must be not Empty";
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CustomAddTextField(
-                                  type: TextInputType.text,
-                                  color: Colors.black,
-                                  controllerName: priceController,
-                                  label: "price",
-                                  valedate: (String val) {
-                                    if (val.isEmpty) {
-                                      return "price must be not Empty";
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child:
-                                  Container(
-                                    width: double.infinity,
-                                    height: MediaQuery.of(context).size.height*0.07,
-                                    decoration: BoxDecoration(
-                                      gradient: Constant.primaryBodyColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: TextButton(
-                                      child:Text("accepted",style: Styles.defaultTextStyle.copyWith(
-                                          color: Constant.secondaryColor
-                                      ),) ,
-                                      onPressed: (){},
-                                    ),
-                                  )
-                              ),
-
-                            ],
-                          ),
-                        ),
-
-
-
                       ),
                     ),
-
-                  )),
-            ],
-          ),
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
-      );  }
+      ),
+    );
+  }
 }

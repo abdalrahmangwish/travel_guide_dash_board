@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
@@ -96,12 +95,11 @@ class UserItem extends StatelessWidget {
                       Text('name '),
                       SizedBox(height: 10),
                       Text('email '),
-
                     ],
                   ),
                   const Spacer(),
                   BlockCustomBottom(
-                    width: MediaQuery.of(context).size.width*0.065,
+                      width: MediaQuery.of(context).size.width * 0.065,
                       text: "delete",
                       height: 40,
                       onPress: () {},
@@ -116,6 +114,5 @@ class UserItem extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

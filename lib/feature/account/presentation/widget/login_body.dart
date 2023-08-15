@@ -1,9 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/global_widget/global_widget.dart';
 import 'package:flutter_travel_guide_dashborad/core/responsive/responsive.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/login_model.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/presentation/blocs/login_cubit/login_cubit.dart';
 
 class LoginBody extends StatelessWidget {
   const LoginBody({
@@ -104,7 +105,14 @@ class LoginBody extends StatelessWidget {
                             height: 50,
                             buttonColor: Colors.green,
                             onPress: () {
-
+                              if (formKey.currentState!.validate()) {
+                                context.read<LoginCubit>().login(
+                                      LoginParamsModel(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                      ),
+                                    );
+                              }
                             },
                             borderColor: Colors.black54,
                             textStyleForButton:
