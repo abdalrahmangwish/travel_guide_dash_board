@@ -152,7 +152,7 @@ class ActivityImageContainer extends StatelessWidget {
                       )
                     : CachedNetworkImage(
                         imageUrl:
-                            "${NetworkConfigurations.BaseUrl}${NetworkConfigurations.kGetImagePath}/${imageModel.url?.split('/').last}",
+                            "${NetworkConfigurations.BaseUrl}${imageModel.url}",
                         fit: BoxFit.cover,
                       ),
               ),

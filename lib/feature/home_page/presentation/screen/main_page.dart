@@ -1,7 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
+import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
+import 'package:flutter_travel_guide_dashborad/core/global_widget/global_widget.dart';
+import 'package:flutter_travel_guide_dashborad/core/services/network/network_configration.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/get_activity_model.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/domain/use_cases/get_all_activity_use_case.dart';
+import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/blocs/home_bloc/home_bloc.dart';
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/widget/home_page_widgets.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({
@@ -11,75 +21,156 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-final CarouselOptions options = CarouselOptions(
-  autoPlay: false,
-  enlargeCenterPage: true,
-  aspectRatio: 2,
-  enlargeStrategy: CenterPageEnlargeStrategy.height,
-);
-
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-                flex: 6,
-                child: Container(
-                  height: double.infinity,
-                  decoration:
-                      BoxDecoration(gradient: Constant.primaryBodyColor),
-                  child: Padding(
-                    padding: EdgeInsets.all(Constant.defaultPadding),
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Colors.black.withOpacity(0.5), // Shadow color
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(0, 1),
+    return BlocProvider(
+      create: (context) => GetAllAdsBloc()..add(GetNewAdsEvents()),
+      child: Builder(builder: (context) {
+        return LoaderOverlay(
+          useDefaultLoading: false,
+          overlayWidget: const Center(
+            child: SpinKitSpinningLines(
+              color: Colors.white,
+              size: 50.0,
+            ),
+          ),
+          child: Scaffold(
+            body: SafeArea(
+              child: Row(
+                children: [
+                  Expanded(
+                      flex: 6,
+                      child: Container(
+                        decoration:
+                            BoxDecoration(gradient: Constant.primaryBodyColor),
+                        child: Padding(
+                          padding: EdgeInsets.all(Constant.defaultPadding),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: BlocBuilder<GetAllAdsBloc, GetAllAdsState>(
+                              buildWhen: (previous, current) {
+                                if (current is CompleteGetAllAds) return true;
+                                if (current is LoadingGetAllAds) return true;
+                                if (current is ErrorGetAllAds) return true;
+                                return false;
+                              },
+                              builder: (context, state) {
+                                if (state is LoadingGetAllAds) {
+                                  return const HomeLoadingWidget();
+                                }
+                                return context
+                                        .read<GetAllAdsBloc>()
+                                        .listOfAllActivity
+                                        .isEmpty
+                                    ? Center(
+                                        child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "no data to show",
+                                            style:
+                                                StylesText.newDefaultTextStyle,
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              context.read<GetAllAdsBloc>().add(
+                                                    ReGetEvent(),
+                                                  );
+                                            },
+                                            child: Text(
+                                              "try again",
+                                              style:
+                                                  StylesText.defaultTextStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ))
+                                    : ScrollConfiguration(
+                                        behavior:
+                                            ScrollConfiguration.of(context)
+                                                .copyWith(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          dragDevices: {
+                                            PointerDeviceKind.touch,
+                                            PointerDeviceKind.mouse,
+                                            PointerDeviceKind.trackpad
+                                          },
+                                        ),
+                                        child: RefreshIndicator(
+                                          color: Colors.blue,
+                                          onRefresh: () async {
+                                            final result =
+                                                await GetAllActivityUseCase()
+                                                    .call(
+                                              GetActivityParamsModel(1),
+                                            );
+                                            result.fold(
+                                              (l) => context
+                                                  .read<GetAllAdsBloc>()
+                                                  .add(UpdateAllPostPage(
+                                                      list: const [])),
+                                              (r) {
+                                                context
+                                                    .read<GetAllAdsBloc>()
+                                                    .add(UpdateAllPostPage(
+                                                        list: r.data?.data ??
+                                                            []));
+                                              },
+                                            );
+                                          },
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            itemBuilder: (context, index) {
+                                              if (index ==
+                                                  context
+                                                      .read<GetAllAdsBloc>()
+                                                      .listOfAllActivity
+                                                      .length) {
+                                                return const GettingNewAdsTheWholeWidget();
+                                              }
+                                              return ItemBuilderAds(
+                                                model: context
+                                                    .read<GetAllAdsBloc>()
+                                                    .listOfAllActivity[index],
+                                              );
+                                            },
+                                            itemCount: context
+                                                    .read<GetAllAdsBloc>()
+                                                    .listOfAllActivity
+                                                    .length +
+                                                1,
+                                          ),
+                                        ),
+                                      );
+                              },
+                            ),
+                          ),
                         ),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: double.infinity,
-                        child: ListView.builder(
-                          itemBuilder: (context, index) => ItemBuilderAds(),
-                          itemCount: 2,
-                        )),
-                  ),
-                )),
-          ],
-        ),
-      ),
+                      )),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
 
-class ItemBuilderAds extends StatefulWidget {
+class ItemBuilderAds extends StatelessWidget {
   const ItemBuilderAds({
     Key? key,
+    required this.model,
   }) : super(key: key);
-
-  @override
-  State<ItemBuilderAds> createState() => _ItemBuilderAdsState();
-}
-
-class _ItemBuilderAdsState extends State<ItemBuilderAds> {
-  List<String> images = [
-    'https://cdna.4imprint.com/qtz/homepage/categories/images21/drinkware0222.jpg',
-    'https://cdna.4imprint.com/qtz/homepage/categories/images21/drinkware0222.jpg',
-    'https://cdna.4imprint.com/qtz/homepage/categories/images21/drinkware0222.jpg',
-    'https://cdna.4imprint.com/qtz/homepage/categories/images21/drinkware0222.jpg',
-  ];
-
+  final ActivityRemoteModel model;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,11 +206,11 @@ class _ItemBuilderAdsState extends State<ItemBuilderAds> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.0099,
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('name '),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                     ],
                   ),
                 ],
@@ -128,47 +219,73 @@ class _ItemBuilderAdsState extends State<ItemBuilderAds> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(width: 0.5, color: Colors.grey),
-                      ),
-                      child: CarouselSlider(
-                        items: images
-                            .map(
-                              (e) => ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(e),
+                  if (model.urls?.isNotEmpty ?? true)
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(width: 0.5, color: Colors.grey),
+                        ),
+                        child: CarouselSlider(
+                          items: model.urls
+                              ?.map(
+                                (e) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                            "${NetworkConfigurations.BaseUrl}${e.url}",
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        options: options,
+                              )
+                              .toList(),
+                          options: CarouselOptions(
+                            autoPlay: false,
+                            padEnds: false,
+                            enlargeCenterPage: true,
+                            aspectRatio: 2,
+                            enableInfiniteScroll: false,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
                   Expanded(
                     flex: 1,
                     child: Column(
                       children: [
-                        Text('sssssssssssssss'),
-                        Text('sssssssssssssss'),
-                        Text('sssssssssssssss'),
-                        Text('sssssssssssssss'),
+                        Text(
+                          model.name ?? "",
+                          style: StylesText.newDefaultTextStyle
+                              .copyWith(color: Colors.black),
+                        ),
+                        Text(
+                          model.price.toString(),
+                          style: StylesText.newDefaultTextStyle
+                              .copyWith(color: Colors.black),
+                        ),
+                        Text(
+                          model.region?.name ?? "",
+                          style: StylesText.newDefaultTextStyle
+                              .copyWith(color: Colors.black),
+                        ),
+                        Text(
+                          model.type ?? "",
+                          style: StylesText.newDefaultTextStyle
+                              .copyWith(color: Colors.black),
+                        ),
                       ],
                     ),
                   )

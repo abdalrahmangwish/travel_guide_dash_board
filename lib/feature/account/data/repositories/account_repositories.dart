@@ -4,6 +4,8 @@ import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remot
 import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/login_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/domain/repositories/iaccount_repository.dart';
 
+import '../models/remote/add_guide_models.dart';
+
 class AccountRepositories implements IAccountRepository {
   final AccountRemoteDataSource accountRemoteDataSource =
       AccountRemoteDataSource();
@@ -16,6 +18,31 @@ class AccountRepositories implements IAccountRepository {
       final LoginResponseModel res = await accountRemoteDataSource.login(
         model,
       );
+      return Right(res);
+    } catch (e) {
+      return const Left("Error while updating fcm token");
+    }
+  }
+
+  @override
+  Future<Either<String, AddGuideResponseModel>> addGuide(
+    AddGuideParamsModel model,
+  ) async {
+    try {
+      final AddGuideResponseModel res = await accountRemoteDataSource.addGuide(
+        model,
+      );
+      return Right(res);
+    } catch (e) {
+      return const Left("Error while updating fcm token");
+    }
+  }
+
+  @override
+  Future<Either<String, GetAllGuideResponseModel>> getAllGuide() async {
+    try {
+      final GetAllGuideResponseModel res =
+          await accountRemoteDataSource.getAllGuide();
       return Right(res);
     } catch (e) {
       return const Left("Error while updating fcm token");

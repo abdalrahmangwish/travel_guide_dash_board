@@ -4,8 +4,10 @@ import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_guide/presentation/add_guide.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/add_places.dart';
 import 'package:flutter_travel_guide_dashborad/feature/guide_profile/presentation/guide_profile.dart';
+import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/blocs/main_bloc/main_cubit.dart';
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/screen/main_page.dart';
 import 'package:flutter_travel_guide_dashborad/feature/user_profile/presentation/user_profile.dart';
+import 'package:flutter_travel_guide_dashborad/service_locator.dart';
 
 class SideMenuTravelGuide extends StatefulWidget {
   const SideMenuTravelGuide({super.key});
@@ -26,7 +28,7 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
     });
     items = [
       SideMenuItem(
-        title: 'Dashboard',
+        title: 'dashboard',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
@@ -35,46 +37,37 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
         ),
       ),
       SideMenuItem(
-        title: 'Add guide',
+        title: 'add guide',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
         icon: const Icon(Icons.person_add_rounded),
       ),
       SideMenuItem(
-        title: 'Add activity',
+        title: 'add activity',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
         icon: const Icon(Icons.add_photo_alternate_rounded),
       ),
       SideMenuItem(
-        title: 'User profile',
+        title: 'users',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
         icon: const Icon(Icons.person_2_outlined),
       ),
       SideMenuItem(
-        title: 'update profile',
+        title: 'guides',
         onTap: (index, _) {
           sideMenu.changePage(index);
         },
         icon: const Icon(Icons.supervised_user_circle_rounded),
       ),
       SideMenuItem(
-        title: 'Feedback',
+        title: 'exit',
         onTap: (index, _) {
-          sideMenu.changePage(index);
-        },
-        icon: const Icon(
-          Icons.feedback_outlined,
-        ),
-      ),
-      SideMenuItem(
-        title: 'Exit',
-        onTap: (index, _) {
-          // sl<HomeCubit>().logOut();
+          sl<MainCubit>().logout();
         },
         icon: const Icon(Icons.exit_to_app),
       ),

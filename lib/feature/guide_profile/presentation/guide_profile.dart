@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
 import 'package:flutter_travel_guide_dashborad/core/global_widget/global_widget.dart';
+import 'package:flutter_travel_guide_dashborad/core/services/network/network_configration.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/add_guide_models.dart';
+import 'package:flutter_travel_guide_dashborad/feature/guide_profile/presentation/blocs/guides_cubit/guides_cubit.dart';
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/widget/home_page_widgets.dart';
 
 class GuideProfile extends StatelessWidget {
@@ -9,51 +13,71 @@ class GuideProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-                flex: 6,
-                child: Container(
-                  height: double.infinity,
-                  decoration:
-                      BoxDecoration(gradient: Constant.primaryBodyColor),
-                  child: Padding(
-                    padding: EdgeInsets.all(Constant.defaultPadding),
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Colors.black.withOpacity(0.5), // Shadow color
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: double.infinity,
-                        child: ListView.builder(
-                          itemBuilder: (context, index) => UserItem(),
-                          itemCount: 2,
-                        )),
+    return BlocProvider(
+      create: (context) => GuidesCubit()..getGuides(),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(gradient: Constant.primaryBodyColor),
+            child: Padding(
+              padding: EdgeInsets.all(Constant.defaultPadding),
+              child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5), // Shadow color
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                )),
-          ],
-        ),
-      ),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: double.infinity,
+                  child: BlocBuilder<GuidesCubit, GuidesState>(
+                    buildWhen: (previous, current) {
+                      if (current is GetGuideError) return true;
+                      if (current is GetGuideLoading) return true;
+                      if (current is GetGuideLoaded) return true;
+                      return false;
+                    },
+                    builder: (context, state) {
+                      if (state is GetGuideLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (context.read<GuidesCubit>().guides.isEmpty) {
+                        return Center(
+                          child: Text(
+                            "no data to show",
+                            style: StylesText.newDefaultTextStyle
+                                .copyWith(color: Colors.black),
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        itemBuilder: (context, index) => UserItem(
+                          model: context.read<GuidesCubit>().guides[index],
+                        ),
+                        itemCount: context.read<GuidesCubit>().guides.length,
+                      );
+                    },
+                  )),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
 
 class UserItem extends StatefulWidget {
-  UserItem({Key? key}) : super(key: key);
-
+  const UserItem({Key? key, required this.model}) : super(key: key);
+  final GuideModel model;
   @override
   State<UserItem> createState() => _UserItemState();
 }
@@ -88,24 +112,18 @@ class _UserItemState extends State<UserItem> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const TravelGuideUserAvatar(
-                    imageUrl: "",
+                  TravelGuideUserAvatar(
+                    imageUrl:
+                        "${NetworkConfigurations.BaseUrl}/${widget.model.image}",
                     width: 50,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.0099,
                   ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('name '),
-                      SizedBox(height: 10),
-                      Text('email '),
-                    ],
-                  ),
+                  Text(widget.model.name ?? ""),
                   const Spacer(),
                   Row(
                     children: [
@@ -170,7 +188,7 @@ class _UserItemState extends State<UserItem> {
                                     MediaQuery.of(context).size.width * 0.0999,
                               ),
                               Text(
-                                '22',
+                                widget.model.age.toString(),
                                 style: StylesText.textStyleForDescription,
                               ),
                             ],
@@ -188,7 +206,7 @@ class _UserItemState extends State<UserItem> {
                                     MediaQuery.of(context).size.width * 0.0999,
                               ),
                               Text(
-                                '1.5',
+                                widget.model.yearsofExperience.toString(),
                                 style: StylesText.textStyleForDescription,
                               ),
                             ],
@@ -212,7 +230,7 @@ class _UserItemState extends State<UserItem> {
                                     MediaQuery.of(context).size.width * 0.0999,
                               ),
                               Text(
-                                'Damascus',
+                                widget.model.location ?? "",
                                 style: StylesText.textStyleForDescription,
                               ),
                             ],
@@ -230,7 +248,7 @@ class _UserItemState extends State<UserItem> {
                                     MediaQuery.of(context).size.width * 0.0999,
                               ),
                               Text(
-                                'cnaj.kscnjas.cnajkscaskjcb s.ahdsl;da/dmka',
+                                widget.model.bio ?? "",
                                 style: StylesText.textStyleForDescription,
                                 maxLines: 1,
                               ),

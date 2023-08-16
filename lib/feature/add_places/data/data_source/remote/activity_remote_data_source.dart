@@ -3,6 +3,7 @@ import 'package:flutter_travel_guide_dashborad/core/services/network/network_int
 import 'package:flutter_travel_guide_dashborad/core/services/network/network_service.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/activity_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/city_models.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/get_activity_model.dart';
 
 class ActivityRemoteDataSource {
   NetworkServices networkServices = NetworkServices();
@@ -16,6 +17,18 @@ class ActivityRemoteDataSource {
       ),
     );
     return Future.value(GetAllCityResponseModel.fromJson(res));
+  }
+
+  Future<GetActivityResponseModel> getActivity(
+      GetActivityParamsModel params) async {
+    final res = await networkServices.get(
+      RemoteDataBundle(
+        body: {},
+        networkPath: NetworkConfigurations.kGetActivity,
+        urlParams: <String, dynamic>{"page": params.page},
+      ),
+    );
+    return Future.value(GetActivityResponseModel.fromJson(res));
   }
 
   Future<AddActivityResponseModel> addActivity(

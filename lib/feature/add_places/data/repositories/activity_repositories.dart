@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/data/data_source/remote/activity_remote_data_source.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/activity_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/city_models.dart';
+import 'package:flutter_travel_guide_dashborad/feature/add_places/data/models/remote/get_activity_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/domain/repositories/iacctivity_repository.dart';
 
 class ActivityRepositories implements IActivityRepository {
@@ -13,6 +14,18 @@ class ActivityRepositories implements IActivityRepository {
     try {
       final GetAllCityResponseModel res =
           await accountRemoteDataSource.getAllCities();
+      return Right(res);
+    } catch (e) {
+      return const Left("Error while updating fcm token");
+    }
+  }
+
+  @override
+  Future<Either<String, GetActivityResponseModel>> getAllActivity(
+      GetActivityParamsModel params) async {
+    try {
+      final GetActivityResponseModel res =
+          await accountRemoteDataSource.getActivity(params);
       return Right(res);
     } catch (e) {
       return const Left("Error while updating fcm token");
