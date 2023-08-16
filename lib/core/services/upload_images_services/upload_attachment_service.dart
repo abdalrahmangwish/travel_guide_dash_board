@@ -16,6 +16,7 @@ class BackgroundUploader {
     required Uint8List filePath,
     required Map<String, String> headers,
     required String url,
+    required String type,
   }) async {
     final String taskId = const Uuid().v4();
     final CancelToken cancelToken = CancelToken();
@@ -25,6 +26,7 @@ class BackgroundUploader {
         MultipartFile.fromBytes(filePath, filename: fileName);
     MapEntry<String, MultipartFile> imageEntry = MapEntry("images[0]", file);
     body.files.add(imageEntry);
+    body.fields.add(MapEntry("type", type));
     dio.post(
       url,
       data: body,

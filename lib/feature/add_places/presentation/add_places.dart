@@ -65,7 +65,7 @@ class _AddPlacesState extends State<AddPlaces> {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => UploadImageCubit()..initState([]),
+              create: (context) => UploadImageCubit("activity")..initState([]),
             ),
           ],
           child: Builder(builder: (context) {

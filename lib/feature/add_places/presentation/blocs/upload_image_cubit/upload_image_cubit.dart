@@ -11,7 +11,8 @@ part 'upload_image_state.dart';
 
 class UploadImageCubit extends Cubit<UploadImageState> {
   final BackgroundUploader uploader = BackgroundUploader();
-  UploadImageCubit() : super(UploadImageInitial()) {
+  final String type;
+  UploadImageCubit(this.type) : super(UploadImageInitial()) {
     uploader.updateNotificationPage.stream.listen((event) {
       if (event.attachmentState == AttachmentState.enqueue) {
         updateProgress(progress: event.progress ?? 0, upId: event.taskId);
@@ -44,6 +45,7 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       final headers = await NetworkServices.initTokenAndHeaders();
       uploader
           .enqueueFile(
+            type: type,
             fileName: model.imageName,
             filePath: model.imagePath!,
             headers: headers,
@@ -142,6 +144,7 @@ class UploadImageCubit extends Cubit<UploadImageState> {
       final headers = await NetworkServices.initTokenAndHeaders();
       uploader
           .enqueueFile(
+            type: type,
             fileName: attachments[index].imageName,
             filePath: attachments[index].imagePath!,
             headers: headers,
