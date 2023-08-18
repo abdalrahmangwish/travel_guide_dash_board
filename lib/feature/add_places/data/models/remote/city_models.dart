@@ -145,8 +145,10 @@ class AddCityResponseModel {
 class AddRegionParamsModel {
   final String name;
   final int cityId;
+  final List<String> images;
 
   AddRegionParamsModel({
+    required this.images,
     required this.name,
     required this.cityId,
   });
@@ -154,6 +156,7 @@ class AddRegionParamsModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['city_id'] = cityId;
+    data['images'] = images;
     return data;
   }
 }

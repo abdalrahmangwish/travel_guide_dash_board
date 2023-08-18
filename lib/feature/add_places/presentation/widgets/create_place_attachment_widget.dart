@@ -14,8 +14,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 class CreateActivityAttachmentSection extends StatelessWidget {
   const CreateActivityAttachmentSection({
     Key? key,
+    required this.smallSize,
   }) : super(key: key);
-
+  final bool smallSize;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,15 +52,17 @@ class CreateActivityAttachmentSection extends StatelessWidget {
             ),
           ),
         ),
-        const ActivityScreenImageSection(),
+        ActivityScreenImageSection(smallSize: smallSize),
       ],
     );
   }
 }
 
 class ActivityScreenImageSection extends StatelessWidget {
+  final bool smallSize;
   const ActivityScreenImageSection({
     Key? key,
+    required this.smallSize,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -106,6 +109,7 @@ class ActivityScreenImageSection extends StatelessWidget {
                   },
                   builder: (context, state) {
                     return ActivityImageContainer(
+                      smallSize: smallSize,
                       imageModel: attachment,
                     );
                   },
@@ -122,8 +126,9 @@ class ActivityScreenImageSection extends StatelessWidget {
 
 class ActivityImageContainer extends StatelessWidget {
   final ImageLocalModel imageModel;
-
-  const ActivityImageContainer({super.key, required this.imageModel});
+  final bool smallSize;
+  const ActivityImageContainer(
+      {super.key, required this.imageModel, required this.smallSize});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -134,8 +139,8 @@ class ActivityImageContainer extends StatelessWidget {
           InkWell(
             onTap: () {},
             child: Container(
-              height: 20.w,
-              width: 20.w,
+              height: smallSize ? 10.w : 20.w,
+              width: smallSize ? 10.w : 20.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Corners.s10),
                 color: Colors.transparent,

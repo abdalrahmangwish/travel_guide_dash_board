@@ -57,10 +57,10 @@ class ActivityCubit extends Cubit<ActivityState> {
     );
   }
 
-  void addRegion(String name, int id) async {
+  void addRegion(String name, int id, List<String> images) async {
     emit(AddRegionLoading());
     final res = await AddRegionUseCase()
-        .call(AddRegionParamsModel(cityId: id, name: name));
+        .call(AddRegionParamsModel(cityId: id, name: name, images: images));
     res.fold(
       (l) => emit(AddRegionError()),
       (r) {

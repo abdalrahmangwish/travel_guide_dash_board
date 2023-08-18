@@ -13,6 +13,7 @@ import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/b
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/add_activity_dialogs.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/add_place_widgets.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/widgets/create_place_attachment_widget.dart';
+import 'package:flutter_travel_guide_dashborad/feature/map_page/map_screen.dart';
 import 'package:flutter_travel_guide_dashborad/service_locator.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -49,6 +50,8 @@ class _AddPlacesState extends State<AddPlaces> {
   String? selectedCity;
   String? selectedRegion;
   var formKey = GlobalKey<FormState>();
+  double lat = 33.510414;
+  double lang = 36.278336;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +131,8 @@ class _AddPlacesState extends State<AddPlaces> {
                             ),
                             const Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: CreateActivityAttachmentSection(),
+                              child: CreateActivityAttachmentSection(
+                                  smallSize: false),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -290,6 +294,17 @@ class _AddPlacesState extends State<AddPlaces> {
                                 ],
                               ),
                             ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              padding: const EdgeInsets.all(8),
+                              child: MapScreen(
+                                gesture: true,
+                                onTap: (argument) {
+                                  lat = argument.target.latitude;
+                                  lang = argument.target.longitude;
+                                },
+                              ),
+                            ),
                             Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
@@ -334,8 +349,8 @@ class _AddPlacesState extends State<AddPlaces> {
                                               price: priceController.text,
                                               description:
                                                   descriptionController.text,
-                                              latitude: 0,
-                                              longitude: 0,
+                                              latitude: lat,
+                                              longitude: lang,
                                               images: context
                                                   .read<UploadImageCubit>()
                                                   .attachments
