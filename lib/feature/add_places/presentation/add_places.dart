@@ -26,14 +26,12 @@ class AddPlaces extends StatefulWidget {
 
 class _AddPlacesState extends State<AddPlaces> {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController typeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
   @override
   void dispose() {
     nameController.dispose();
-    typeController.dispose();
     descriptionController.dispose();
     priceController.dispose();
     super.dispose();
@@ -48,6 +46,7 @@ class _AddPlacesState extends State<AddPlaces> {
   List<CityModel> citiesList = [];
   List<RegionModel> regionsList = [];
   String? selectedCity;
+  String? selectedType;
   String? selectedRegion;
   var formKey = GlobalKey<FormState>();
   double lat = 33.510414;
@@ -76,7 +75,6 @@ class _AddPlacesState extends State<AddPlaces> {
               bloc: sl<ActivityCubit>(),
               listener: (context, state) {
                 if (state is AddActivityLoaded) {
-                  typeController.clear();
                   nameController.clear();
                   descriptionController.clear();
                   priceController.clear();
@@ -136,15 +134,12 @@ class _AddPlacesState extends State<AddPlaces> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: CustomAddTextField(
-                                type: TextInputType.text,
-                                color: Colors.black,
-                                controllerName: typeController,
-                                label: "type",
-                                valedate: (String val) {
-                                  if (val.isEmpty) {
-                                    return "type must be not Empty";
-                                  }
+                              child: DropDownTextField(
+                                selectedOption: selectedType,
+                                hintText: "type",
+                                options: Constant.type,
+                                onChanged: (value) {
+                                  selectedType = value;
                                 },
                               ),
                             ),
@@ -324,6 +319,8 @@ class _AddPlacesState extends State<AddPlaces> {
                                     onPressed: () {
                                       if (selectedRegion == null) {
                                         Utils.showCustomToast("select region");
+                                      } else if (selectedType == null) {
+                                        Utils.showCustomToast("select type");
                                       } else if (context
                                               .read<UploadImageCubit>()
                                               .attachments
@@ -345,7 +342,7 @@ class _AddPlacesState extends State<AddPlaces> {
                                               name: nameController.text,
                                               regionId:
                                                   regionsList[index].id ?? -1,
-                                              type: typeController.text,
+                                              type: selectedType!,
                                               price: priceController.text,
                                               description:
                                                   descriptionController.text,
