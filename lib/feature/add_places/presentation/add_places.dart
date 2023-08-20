@@ -54,7 +54,8 @@ class _AddPlacesState extends State<AddPlaces> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
+    return
+      LoaderOverlay(
       useDefaultLoading: false,
       overlayWidget: const Center(
         child: SpinKitSpinningLines(

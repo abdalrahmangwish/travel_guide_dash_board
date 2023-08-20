@@ -23,34 +23,15 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: LoaderOverlay(
+        home: const LoaderOverlay(
             useDefaultLoading: false,
-            overlayWidget: const Center(
+            overlayWidget: Center(
               child: SpinKitSpinningLines(
                 color: Colors.white,
                 size: 50.0,
               ),
             ),
-            child: BlocListener<MainCubit, MainState>(
-                bloc: sl<MainCubit>(),
-                listener: (context, state) {
-                  if (state is LogoutLoaded) {
-                    context.loaderOverlay.hide();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                      (route) => false,
-                    );
-                  } else if (state is LogoutError) {
-                    context.loaderOverlay.hide();
-                    Utils.showCustomToast("error while logging out");
-                  } else if (state is LogoutLoading) {
-                    context.loaderOverlay.show();
-                  }
-                },
-                child: const SideMenuTravelGuide())),
+            child: SideMenuTravelGuide(),),
         navigatorKey: AppSettings().navigatorKey,
       );
     });

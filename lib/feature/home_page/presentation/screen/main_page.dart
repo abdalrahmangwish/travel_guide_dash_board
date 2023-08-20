@@ -13,6 +13,8 @@ import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/bl
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/widget/home_page_widgets.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import '../../../details/presentation/pages/details_screen.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({
     Key? key,
@@ -136,10 +138,19 @@ class _MainPageState extends State<MainPage> {
                                                       .length) {
                                                 return const GettingNewAdsTheWholeWidget();
                                               }
-                                              return ItemBuilderAds(
-                                                model: context
-                                                    .read<GetAllAdsBloc>()
-                                                    .listOfAllActivity[index],
+                                              return InkWell(
+                                                onTap: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DetailsScreen(
+                                                              model:ActivityRemoteModel(),
+                                                            ))),
+                                                child: ItemBuilderAds(
+                                                  model: context
+                                                      .read<GetAllAdsBloc>()
+                                                      .listOfAllActivity[index],
+                                                ),
                                               );
                                             },
                                             itemCount: context
