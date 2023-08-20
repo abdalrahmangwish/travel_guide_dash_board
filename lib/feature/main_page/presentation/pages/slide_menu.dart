@@ -1,6 +1,10 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
+import 'package:flutter_travel_guide_dashborad/core/utils/utils.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/presentation/screen/login_page.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_guide/presentation/add_guide.dart';
 import 'package:flutter_travel_guide_dashborad/feature/add_places/presentation/add_places.dart';
 import 'package:flutter_travel_guide_dashborad/feature/guide_profile/presentation/guide_profile.dart';
@@ -8,6 +12,7 @@ import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/bl
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/screen/main_page.dart';
 import 'package:flutter_travel_guide_dashborad/feature/user_profile/presentation/user_profile.dart';
 import 'package:flutter_travel_guide_dashborad/service_locator.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class SideMenuTravelGuide extends StatefulWidget {
   const SideMenuTravelGuide({super.key});
@@ -77,45 +82,74 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SideMenu(
-            style: SideMenuStyle(
-              selectedTitleTextStyle:
-                  StylesText.newDefaultTextStyle.copyWith(color: Colors.black),
-              unselectedTitleTextStyle:
-                  StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
-              displayMode: SideMenuDisplayMode.auto,
-              openSideMenuWidth: 200,
-              iconSize: 20,
-              itemBorderRadius: const BorderRadius.all(
-                Radius.circular(5.0),
+    return  LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitSpinningLines(
+          color: Colors.white,
+          size: 50.0,
+        ),
+      ),
+      child: BlocListener<MainCubit, MainState>(
+        bloc: sl<MainCubit>(),
+        listener: (context, state) {
+          if (state is LogoutLoaded) {
+            context.loaderOverlay.hide();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
               ),
-              showTooltip: true,
-              itemHeight: 50.0,
-              itemInnerSpacing: 8.0,
-              itemOuterPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-            ),
-            controller: sideMenu,
-            title: DrawerHeader(child: Image.asset('assets/images/intro.png')),
-            items: items,
+                  (route) => false,
+            );
+          } else if (state is LogoutError) {
+            context.loaderOverlay.hide();
+            Utils.showCustomToast("error while logging out");
+          } else if (state is LogoutLoading) {
+            context.loaderOverlay.show();
+          }
+        },
+        child: Scaffold(
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SideMenu(
+                style: SideMenuStyle(
+                  selectedTitleTextStyle:
+                      StylesText.newDefaultTextStyle.copyWith(color: Colors.black),
+                  unselectedTitleTextStyle:
+                      StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
+                  displayMode: SideMenuDisplayMode.auto,
+                  openSideMenuWidth: 200,
+                  iconSize: 20,
+                  itemBorderRadius: const BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  showTooltip: true,
+                  itemHeight: 50.0,
+                  itemInnerSpacing: 8.0,
+                  itemOuterPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                ),
+                controller: sideMenu,
+                title: DrawerHeader(child: Image.asset('assets/images/intro.png')),
+                items: items,
+              ),
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: const [
+                    MainPage(),
+                    AddGuide(),
+                    AddPlaces(),
+                    UserProfile(),
+                    GuideProfile()
+                  ],
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: const [
-                MainPage(),
-                AddGuide(),
-                AddPlaces(),
-                UserProfile(),
-                GuideProfile()
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

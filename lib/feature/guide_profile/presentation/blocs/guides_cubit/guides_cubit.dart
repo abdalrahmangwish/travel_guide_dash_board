@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_travel_guide_dashborad/core/models/user_case_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/add_guide_models.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/domain/use_cases/add_guide_use_case.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/domain/use_cases/delete_guide_use_case.dart';
 
 part 'guides_state.dart';
 
@@ -16,5 +17,17 @@ class GuidesCubit extends Cubit<GuidesState> {
       guides = r.data ?? [];
       emit(GetGuideLoaded());
     });
+  }
+
+
+  void deleteGuide( int id) async {
+    emit(DeleteGuideLoading());
+    final res = await DeleteGuideUseCase().call(DeleteParams(id: id));
+    res.fold(
+            (error) => emit(DeleteGuideError()), // Handle error state
+            (success) {
+          emit(DeleteGuideLoaded());
+        }
+    );
   }
 }

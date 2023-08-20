@@ -19,6 +19,7 @@ class ActivityRemoteDataSource {
     return Future.value(GetAllCityResponseModel.fromJson(res));
   }
 
+
   Future<GetActivityResponseModel> getActivity(
       GetActivityParamsModel params) async {
     final res = await networkServices.get(

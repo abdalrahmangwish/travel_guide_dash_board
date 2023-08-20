@@ -13,9 +13,7 @@ class AppSettings {
   }
 
   AppSettings._internal();
-
-  String token =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2FkbWluL3JlZ2lzdGVyIiwiaWF0IjoxNjkyMzM5MTgxLCJleHAiOjE2OTIzNTM1ODEsIm5iZiI6MTY5MjMzOTE4MSwianRpIjoiaUNTR0FBb1JSa216Q0liZiIsInN1YiI6IjEiLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.QB7InG_hTZG5V9jdYgu4FAayrqPHnZQGxm_n36VWYVs';
+  String token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4xOS41Mjo4MDAwL2FwaS9hZG1pbi9yZWdpc3RlciIsImlhdCI6MTY5MjU1MzI3MywiZXhwIjoxNjkyNTY3NjczLCJuYmYiOjE2OTI1NTMyNzMsImp0aSI6InhER1huTWlzRzROU1k3NlQiLCJzdWIiOiIxIiwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.QHNkhnUatq4IYRUQ3Iv9CJljR147k4-ACzvoOLpR3bQ';
   String name = '';
   String email = '';
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

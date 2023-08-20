@@ -62,6 +62,7 @@ class GuideProfile extends StatelessWidget {
                       return ListView.builder(
                         itemBuilder: (context, index) => UserItem(
                           model: context.read<GuidesCubit>().guides[index],
+                          id: index,
                         ),
                         itemCount: context.read<GuidesCubit>().guides.length,
                       );
@@ -76,8 +77,10 @@ class GuideProfile extends StatelessWidget {
 }
 
 class UserItem extends StatefulWidget {
-  const UserItem({Key? key, required this.model}) : super(key: key);
+  const UserItem({Key? key, required this.model, required this.id})
+      : super(key: key);
   final GuideModel model;
+  final int id;
   @override
   State<UserItem> createState() => _UserItemState();
 }
@@ -127,15 +130,36 @@ class _UserItemState extends State<UserItem> {
                   const Spacer(),
                   Row(
                     children: [
-                      BlockCustomBottom(
-                          width: MediaQuery.of(context).size.width * 0.065,
-                          text: "delete",
-                          height: 40,
-                          onPress: () {},
-                          borderColor: Colors.grey,
-                          textStyleForButton: StylesText.newTextStyleForAppBar
-                              .copyWith(fontSize: 14),
-                          color: Colors.red),
+                      BlocBuilder<GuidesCubit, GuidesState>(
+                        buildWhen: (previous, current) {
+                          if (current is DeleteGuideError) return true;
+                          if (current is DeleteGuideLoading) return true;
+                          if (current is DeleteGuideLoaded) return true;
+                          return false;
+                        },
+                        builder: (context, state) {
+                          if (state is DeleteGuideLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (state is DeleteGuideError) {
+                            return Text('error while deleted');
+                          }
+                          return BlockCustomBottom(
+                              width: MediaQuery.of(context).size.width * 0.065,
+                              text: "delete",
+                              height: 40,
+                              onPress: () {
+                                context
+                                    .read<GuidesCubit>()
+                                    .deleteGuide(widget.id);
+                              },
+                              borderColor: Colors.grey,
+                              textStyleForButton: StylesText
+                                  .newTextStyleForAppBar
+                                  .copyWith(fontSize: 14),
+                              color: Colors.red);
+                        },
+                      ),
                       IconButton(
                           onPressed: () {
                             setState(() {
