@@ -144,7 +144,9 @@ class _MainPageState extends State<MainPage> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             DetailsScreen(
-                                                              model:ActivityRemoteModel(),
+                                                              model:context
+                                                                  .read<GetAllAdsBloc>()
+                                                                  .listOfAllActivity[index],
                                                             ))),
                                                 child: ItemBuilderAds(
                                                   model: context

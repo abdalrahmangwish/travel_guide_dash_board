@@ -2,6 +2,7 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
 import 'package:flutter_travel_guide_dashborad/core/utils/utils.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/presentation/screen/login_page.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/sc
 import 'package:flutter_travel_guide_dashborad/feature/user_profile/presentation/user_profile.dart';
 import 'package:flutter_travel_guide_dashborad/service_locator.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:lottie/lottie.dart';
 
 class SideMenuTravelGuide extends StatefulWidget {
   const SideMenuTravelGuide({super.key});
@@ -118,7 +120,7 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
                   selectedTitleTextStyle:
                       StylesText.newDefaultTextStyle.copyWith(color: Colors.black),
                   unselectedTitleTextStyle:
-                      StylesText.newDefaultTextStyle.copyWith(color: Colors.grey),
+                      StylesText.newDefaultTextStyle.copyWith(color: Constant.secondaryColor),
                   displayMode: SideMenuDisplayMode.auto,
                   openSideMenuWidth: 200,
                   iconSize: 20,
@@ -131,7 +133,9 @@ class _SideMenuTravelGuideState extends State<SideMenuTravelGuide> {
                   itemOuterPadding: const EdgeInsets.symmetric(horizontal: 5.0),
                 ),
                 controller: sideMenu,
-                title: DrawerHeader(child: Image.asset('assets/images/intro.png')),
+                title: DrawerHeader(child:   Lottie.network(
+                    'https://lottie.host/08c861a3-b2ef-40b9-b989-a0480e021075/azZIPTxAQg.json'),
+                ),
                 items: items,
               ),
               Expanded(

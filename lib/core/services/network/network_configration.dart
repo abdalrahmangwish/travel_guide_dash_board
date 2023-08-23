@@ -12,7 +12,7 @@ class NetworkConfigurations {
   static const kAddCity = 'for_admin/addcity';
   static const kAddRegion = 'for_admin/addregion';
 
-  static const String BaseUrl = "http://192.168.19.52:8000/api/";
+  static const String BaseUrl = "http://192.168.126.52:8000/api/";
   static const Map<String, String> BaseHeaders = {
     "accept": "application/json, */* ,charset=UTF-8",
     'Charset': 'utf-8'
