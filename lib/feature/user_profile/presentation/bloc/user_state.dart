@@ -1,18 +1,18 @@
 part of 'user_cubit.dart';
 
 @immutable
-abstract class UserState {}
+abstract class UserCubitState {}
 
-class UserInitial extends UserState {}
+class UserInitial extends UserCubitState {}
 
-class GetUserLoading extends UserState {}
+class GetUserLoading extends UserCubitState {}
 
-class GetUserError extends UserState {}
+class GetUserError extends UserCubitState {}
 
-class GetUserLoaded extends UserState {}
+class GetUserLoaded extends UserCubitState {}
 
-class DeleteUserLoading extends UserState {}
+class DeleteUserLoading extends UserCubitState {}
 
-class DeleteUserLoaded extends UserState {}
+class DeleteUserLoaded extends UserCubitState {}
 
-class DeleteUserError extends UserState {}
+class DeleteUserError extends UserCubitState {}
