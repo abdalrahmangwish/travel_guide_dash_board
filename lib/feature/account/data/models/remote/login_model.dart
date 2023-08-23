@@ -40,18 +40,18 @@ class LoginResponseModel {
 class AdminModel {
   int? id;
   String? name;
+  String? image;
   String? email;
-  String? createdAt;
-  String? updatedAt;
+  UserType? type;
 
-  AdminModel({this.id, this.name, this.email, this.createdAt, this.updatedAt});
+  AdminModel({this.id, this.name, this.image, this.type});
 
   AdminModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     email = json['email'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    image = json['image'];
+    type = UserType.fromString(json['type'] ?? 0);
   }
 
   Map<String, dynamic> toJson() {
@@ -59,8 +59,45 @@ class AdminModel {
     data['id'] = id;
     data['name'] = name;
     data['email'] = email;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
+    data['image'] = image;
+    data['type'] = type;
     return data;
+  }
+}
+
+enum UserType {
+  user,
+  guide;
+
+  static formInt(int val) {
+    if (val == 0)
+      return UserType.user;
+    else
+      return UserType.guide;
+  }
+
+  static fromString(String val) {
+    if (val == "user")
+      return UserType.user;
+    else
+      return UserType.guide;
+  }
+
+  String toString() {
+    switch (this) {
+      case guide:
+        return "guide";
+      case user:
+        return "user";
+    }
+  }
+
+  toInt() {
+    switch (this) {
+      case user:
+        return 0;
+      case guide:
+        return 1;
+    }
   }
 }

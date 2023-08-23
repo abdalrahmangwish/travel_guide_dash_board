@@ -15,18 +15,18 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserCubit()..getUser(),
-      child: Builder(builder: (context) {
-        return LoaderOverlay(
-          useDefaultLoading: false,
-          overlayWidget: const Center(
-            child: SpinKitSpinningLines(
-              color: Colors.white,
-              size: 50.0,
-            ),
-          ),
-          child: Scaffold(
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitSpinningLines(
+          color: Colors.white,
+          size: 50.0,
+        ),
+      ),
+      child: BlocProvider(
+        create: (context) => UserCubit()..getUser(),
+        child: Builder(builder: (context) {
+          return Scaffold(
             body: Container(
               width: double.infinity,
               height: double.infinity,
@@ -49,7 +49,7 @@ class UserProfile extends StatelessWidget {
                     ),
                     width: MediaQuery.of(context).size.width * 0.7,
                     height: double.infinity,
-                    child: BlocBuilder<UserCubit, UserState>(
+                    child: BlocBuilder<UserCubit, UserCubitState>(
                       buildWhen: (previous, current) {
                         if (current is GetUserError) return true;
                         if (current is GetUserLoaded) return true;
@@ -91,9 +91,9 @@ class UserProfile extends StatelessWidget {
                     )),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
