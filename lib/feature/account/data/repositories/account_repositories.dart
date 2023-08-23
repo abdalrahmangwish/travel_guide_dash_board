@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/data/data_source/remote/account_remote_data_source.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/delete_model.dart';
+import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/delete_user_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/log_out_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/data/models/remote/login_model.dart';
 import 'package:flutter_travel_guide_dashborad/feature/account/domain/repositories/iaccount_repository.dart';
@@ -62,12 +63,20 @@ class AccountRepositories implements IAccountRepository {
   }
 
   @override
-  Future<Either<String, DeleteModel>> deleteGuide(DeleteParams params) async{
+  Future<Either<String, DeleteModel>> deleteGuide(DeleteParams params) async {
     try {
       final DeleteModel res = await accountRemoteDataSource.deleteGuide(params);
       return Right(res);
     } catch (e) {
       return const Left("Error while updating fcm token");
     }
+  }
+
+  @override
+  Future<Either<String, DeleteUserResponseModel>> deleteUser(
+      DeleteUserParamsModel params) async {
+    final DeleteUserResponseModel res =
+        await accountRemoteDataSource.deleteUser(params);
+    return Right(res);
   }
 }

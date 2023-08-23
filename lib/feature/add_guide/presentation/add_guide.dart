@@ -269,11 +269,7 @@ class _AddGuideState extends State<AddGuide> {
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        if (context
-                                                    .read<AddGuideCubit>()
-                                                    .image !=
-                                                null &&
-                                            selectedGender != null) {
+                                        if (selectedGender != null) {
                                           context
                                               .read<AddGuideCubit>()
                                               .addGuide(
@@ -299,7 +295,7 @@ class _AddGuideState extends State<AddGuide> {
                                                   bio: bioController.text,
                                                   image: context
                                                       .read<AddGuideCubit>()
-                                                      .image!,
+                                                      .image,
                                                 ),
                                               );
                                         }

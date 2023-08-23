@@ -12,9 +12,13 @@ class DeleteGuideUseCase extends UseCase<DeleteModel, DeleteParams> {
     return res;
   }
 }
+
 class DeleteParams {
-  DeleteParams({
-    required this.id
-});
-  final int id ;
+  DeleteParams({required this.id});
+  final int id;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    return data;
+  }
 }

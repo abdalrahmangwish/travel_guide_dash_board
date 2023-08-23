@@ -1,4 +1,3 @@
-
 class GetAllUserModel {
   List<UserModel>? data;
 
@@ -13,11 +12,10 @@ class GetAllUserModel {
 }
 
 class UserModel {
-  String? id;
+  int? id;
   String? name;
   String? email;
   String? image;
-
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

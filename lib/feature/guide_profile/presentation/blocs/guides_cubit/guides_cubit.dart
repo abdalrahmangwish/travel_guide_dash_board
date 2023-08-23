@@ -19,15 +19,13 @@ class GuidesCubit extends Cubit<GuidesState> {
     });
   }
 
-
-  void deleteGuide( int id) async {
-    emit(DeleteGuideLoading());
+  void deleteGuide(int id) async {
+    emit(DeleteGuideLoading(id));
     final res = await DeleteGuideUseCase().call(DeleteParams(id: id));
-    res.fold(
-            (error) => emit(DeleteGuideError()), // Handle error state
-            (success) {
-          emit(DeleteGuideLoaded());
-        }
-    );
+    res.fold((error) => emit(DeleteGuideError(id)), // Handle error state
+        (success) {
+      guides.removeWhere((element) => element.id == id);
+      emit(DeleteGuideLoaded(id));
+    });
   }
 }
