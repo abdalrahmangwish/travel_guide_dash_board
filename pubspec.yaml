@@ -21,9 +21,11 @@ dependencies:
   dio: ^5.2.1+1
   fluttertoast: ^8.2.2
   flutter_screenutil: ^5.8.4
+  comment_tree: ^0.3.0
   responsive_framework: ^1.0.0
   responsive_builder: ^0.7.0
   fl_chart: ^0.63.0
+  lottie: ^2.6.0
   google_maps_flutter: ^2.4.0
   flutter_html: ^3.0.0-beta.2
   flutter_bloc: ^8.1.1

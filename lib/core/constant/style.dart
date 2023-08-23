@@ -6,6 +6,11 @@ class Insets {
 
   static double widthScale = 1.w;
   static double heightScale = 1.h;
+  static LinearGradient primaryBodyColor = const LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFC7F800), Color(0xFF078513)],
+  );
 
   /// Dynamic insets, may get scaled with the device size
   static double mGutter = m * gutterScale;
