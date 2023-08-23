@@ -73,6 +73,8 @@ class NetworkServices implements IRemoteDataSource {
         ),
         queryParameters: remoteBundle.urlParams,
       );
+      print(response.data);
+      print("dsfsdfsdfsd");
       return _returnResponse(response);
     } on DioException catch (e) {
       if (e.response == null) throw Exception("no internet connection");

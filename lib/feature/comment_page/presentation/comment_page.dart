@@ -1,12 +1,8 @@
-
 import 'package:comment_tree/comment_tree.dart';
-import 'package:comment_tree/data/comment.dart';
-import 'package:comment_tree/widgets/comment_tree_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/constant.dart';
 import 'package:flutter_travel_guide_dashborad/core/constant/style.dart';
-import 'package:flutter_travel_guide_dashborad/core/services/app_settings/app_settings.dart';
 import 'package:flutter_travel_guide_dashborad/core/utils/utils.dart';
 import 'package:flutter_travel_guide_dashborad/feature/comment_page/bloc/comment_cubit.dart';
 import 'package:flutter_travel_guide_dashborad/feature/comment_page/data/remote/model/comment_models.dart';
@@ -14,7 +10,6 @@ import 'package:flutter_travel_guide_dashborad/feature/comment_page/presentation
 import 'package:flutter_travel_guide_dashborad/feature/home_page/presentation/widget/home_page_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 
 class CommentPage extends StatefulWidget {
   const CommentPage({
@@ -85,8 +80,8 @@ class _CommentPageState extends State<CommentPage> {
                                   },
                                   child: Text(
                                     "try again",
-                                    style: StylesText.defaultTextStyle
-                                        .copyWith(color: Constant.secondaryColor),
+                                    style: StylesText.defaultTextStyle.copyWith(
+                                        color: Constant.secondaryColor),
                                   ),
                                 )
                               ],
@@ -138,7 +133,7 @@ class CommentItemBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Comment comment = Comment(
-      avatar: commentModel.user?.image,
+      avatar: "",
       userName: commentModel.user?.name,
       content: commentModel.message ?? "",
     );
@@ -151,9 +146,7 @@ class CommentItemBuilder extends StatelessWidget {
             const TreeThemeData(lineColor: Colors.transparent, lineWidth: 3),
         avatarRoot: (context, data) => PreferredSize(
           preferredSize: const Size.fromRadius(18),
-          child: TravelGuideUserAvatar(
-              width: 10.w,
-              imageUrl: commentModel.user?.image?.split("/").last ?? ""),
+          child: TravelGuideUserAvatar(width: 10.w, imageUrl: ""),
         ),
         contentRoot: (context, data) {
           return Column(

@@ -138,16 +138,22 @@ class _MainPageState extends State<MainPage> {
                                                       .length) {
                                                 return const GettingNewAdsTheWholeWidget();
                                               }
+                                              ActivityRemoteModel model =
+                                                  context
+                                                      .read<GetAllAdsBloc>()
+                                                      .listOfAllActivity[index];
                                               return InkWell(
-                                                onTap: () => Navigator.push(
+                                                onTap: () {
+                                                  Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DetailsScreen(
-                                                              model:context
-                                                                  .read<GetAllAdsBloc>()
-                                                                  .listOfAllActivity[index],
-                                                            ))),
+                                                      builder: (context) =>
+                                                          DetailsScreen(
+                                                        model: model,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
                                                 child: ItemBuilderAds(
                                                   model: context
                                                       .read<GetAllAdsBloc>()

@@ -9,7 +9,7 @@ class AddGuideParamsModel {
   final int yearsOfExperience;
   final String location;
   final String bio;
-  final Uint8List image;
+  final Uint8List? image;
   final String fileName;
 
   AddGuideParamsModel({

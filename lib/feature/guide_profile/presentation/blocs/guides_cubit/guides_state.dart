@@ -11,9 +11,20 @@ class GetGuideError extends GuidesState {}
 
 class GetGuideLoaded extends GuidesState {}
 
-class DeleteGuideLoading extends GuidesState {}
+class DeleteGuideLoading extends GuidesState {
+  final int id;
 
-class DeleteGuideError extends GuidesState {}
+  DeleteGuideLoading(this.id);
+}
 
-class DeleteGuideLoaded extends GuidesState {}
+class DeleteGuideError extends GuidesState {
+  final int id;
 
+  DeleteGuideError(this.id);
+}
+
+class DeleteGuideLoaded extends GuidesState {
+  final int id;
+
+  DeleteGuideLoaded(this.id);
+}
