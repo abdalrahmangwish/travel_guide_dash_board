@@ -192,11 +192,7 @@ class _UserItemState extends State<UserItem> {
                               Text(
                                 'gender: ',
                                 style: StylesText.textStyleForDescription
-                                    .copyWith(color: Colors.grey),
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0999,
+                                    .copyWith(color: Colors.green),
                               ),
                               Text(
                                 'male',
@@ -210,11 +206,7 @@ class _UserItemState extends State<UserItem> {
                               Text(
                                 'age: ',
                                 style: StylesText.textStyleForDescription
-                                    .copyWith(color: Colors.grey),
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0999,
+                                    .copyWith(color: Colors.green),
                               ),
                               Text(
                                 widget.model.age.toString(),
@@ -228,35 +220,22 @@ class _UserItemState extends State<UserItem> {
                               Text(
                                 'Years Of Experience :',
                                 style: StylesText.textStyleForDescription
-                                    .copyWith(color: Colors.grey),
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0999,
+                                    .copyWith(color: Colors.green),
                               ),
                               Text(
                                 widget.model.yearsofExperience.toString(),
                                 style: StylesText.textStyleForDescription,
                               ),
                             ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
+                          ),
+                          const Spacer(),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'location: ',
                                 style: StylesText.textStyleForDescription
-                                    .copyWith(color: Colors.grey),
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0999,
+                                    .copyWith(color: Colors.green),
                               ),
                               Text(
                                 widget.model.location ?? "",
@@ -264,26 +243,34 @@ class _UserItemState extends State<UserItem> {
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          Row(
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'bio: ',
                                 style: StylesText.textStyleForDescription
-                                    .copyWith(color: Colors.grey),
+                                    .copyWith(color: Colors.green),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0999,
-                              ),
-                              Text(
-                                widget.model.bio ?? "",
-                                style: StylesText.textStyleForDescription,
-                                maxLines: 1,
+                              Container(
+                                constraints: BoxConstraints(
+                                    minHeight:
+                                        MediaQuery.of(context).size.height *
+                                            0.1),
+                                child: Text(
+                                  widget.model.bio ?? "",
+                                  style: StylesText.textStyleForDescription,
+                                  maxLines: 1,
+                                ),
                               ),
                             ],
                           ),
-                          const Spacer(),
                         ],
                       ),
                     ),

@@ -14,8 +14,8 @@ class NetworkConfigurations {
   static const kAddActivity = 'for_admin/addactivity';
   static const kGetRegion = 'for_admin/getregionsincity';
   static const kAddCity = 'for_admin/addcity';
-  static const kAddRegion = 'for_admin/addreg ion';
-  static const String BaseUrl = "http://192.168.43.85:8000/api/";
+  static const kAddRegion = 'for_admin/addregion';
+  static const String BaseUrl = "http://192.168.43.36:8000/api/";
   //
   // static const String BaseUrl =
   //     "https://unnerved-committee.000webhostapp.com/api/";

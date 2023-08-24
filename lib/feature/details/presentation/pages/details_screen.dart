@@ -43,7 +43,8 @@ class DetailsScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all()),
+                                  border: Border.all(
+                                      color: Colors.grey, width: 0.1)),
                               child: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,10 +104,13 @@ class DetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      "Name",
-                                      style: StylesText.newDefaultTextStyle
-                                          .copyWith(color: Colors.black),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Name",
+                                        style: StylesText.newDefaultTextStyle
+                                            .copyWith(color: Colors.green),
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
@@ -118,24 +122,62 @@ class DetailsScreen extends StatelessWidget {
                                         constraints: const BoxConstraints(
                                             minHeight: 0.01),
                                         decoration: BoxDecoration(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(16)),
-                                        child: Text(
-                                          model.name ?? "",
-                                          style: StylesText
-                                              .textStyleForDescription
-                                              .copyWith(color: Colors.black26),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            model.name ?? "",
+                                            style: StylesText
+                                                .textStyleForDescription
+                                                .copyWith(
+                                                    color: Colors.black26),
+                                          ),
+                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Region Name",
+                                        style: StylesText.newDefaultTextStyle
+                                            .copyWith(color: Colors.green),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Container(
+                                        width: double.infinity,
+                                        constraints: const BoxConstraints(
+                                            minHeight: 0.01),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            model.region?.name ?? "",
+                                            style: StylesText
+                                                .textStyleForDescription
+                                                .copyWith(
+                                                    color: Colors.black26),
+                                          ),
                                         )),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.00999,
                                     ),
-                                    Text(
-                                      "Description",
-                                      style: StylesText.newDefaultTextStyle
-                                          .copyWith(color: Colors.black),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Description",
+                                        style: StylesText.newDefaultTextStyle
+                                            .copyWith(color: Colors.green),
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
@@ -147,40 +189,31 @@ class DetailsScreen extends StatelessWidget {
                                         constraints: const BoxConstraints(
                                             minHeight: 0.01),
                                         decoration: BoxDecoration(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(16)),
-                                        child: Text(
-                                          model.description ?? "",
-                                          style: StylesText
-                                              .textStyleForDescription
-                                              .copyWith(color: Colors.black26),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            model.description ?? "",
+                                            style: StylesText
+                                                .textStyleForDescription
+                                                .copyWith(
+                                                    color: Colors.black26),
+                                          ),
                                         )),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.00999,
                                     ),
-                                    Container(
-                                      width: double.infinity,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.2,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          border: Border.all(
-                                              color: Colors.grey, width: 0.5)),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.00999,
-                                    ),
-                                    Text(
-                                      "City Name",
-                                      style: StylesText.newDefaultTextStyle
-                                          .copyWith(color: Colors.black),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "City Name",
+                                        style: StylesText.newDefaultTextStyle
+                                            .copyWith(color: Colors.green),
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
@@ -192,29 +225,31 @@ class DetailsScreen extends StatelessWidget {
                                         constraints: const BoxConstraints(
                                             minHeight: 0.01),
                                         decoration: BoxDecoration(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(16)),
-                                        child: Text(
-                                          model.city?.name ?? "",
-                                          style: StylesText
-                                              .textStyleForDescription
-                                              .copyWith(color: Colors.black26),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            model.city?.name ?? "",
+                                            style: StylesText
+                                                .textStyleForDescription
+                                                .copyWith(
+                                                    color: Colors.black26),
+                                          ),
                                         )),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.00999,
                                     ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.00999,
-                                    ),
-                                    Text(
-                                      "Rate",
-                                      style: StylesText.newDefaultTextStyle
-                                          .copyWith(color: Colors.black),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Rate",
+                                        style: StylesText.newDefaultTextStyle
+                                            .copyWith(color: Colors.green),
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
@@ -226,14 +261,26 @@ class DetailsScreen extends StatelessWidget {
                                         constraints: const BoxConstraints(
                                             minHeight: 0.01),
                                         decoration: BoxDecoration(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(16)),
-                                        child: Text(
-                                          model.rating.toString() ?? "1",
-                                          style: StylesText
-                                              .textStyleForDescription
-                                              .copyWith(color: Colors.black26),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.star,
+                                                color: Colors.yellow,
+                                              ),
+                                              Text(
+                                                model.rating.toString() ?? "1",
+                                                style: StylesText
+                                                    .textStyleForDescription
+                                                    .copyWith(
+                                                        color: Colors.black26),
+                                              ),
+                                            ],
+                                          ),
                                         )),
                                     SizedBox(
                                       height:
@@ -249,7 +296,7 @@ class DetailsScreen extends StatelessWidget {
                                           height: 50,
                                           width: 50.w,
                                           text: 'review',
-                                          buttonColor: Colors.blue,
+                                          buttonColor: Colors.green,
                                           onPress: () {
                                             Navigator.push(
                                               context,

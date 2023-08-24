@@ -10,7 +10,7 @@ class CommentRemoteDataSource {
     final res = await networkServices.post(
       RemoteDataBundle(
         body: params.toJson(),
-        networkPath: NetworkConfigurations.kAddComment,
+        networkPath: NetworkConfigurations.BaseUrl,
         urlParams: <String, String>{},
       ),
     );

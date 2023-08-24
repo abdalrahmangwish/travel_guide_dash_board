@@ -35,6 +35,7 @@ class _CommentPageState extends State<CommentPage> {
         return Scaffold(
           appBar: widget.showAppbar
               ? AppBar(
+                  backgroundColor: Colors.black26,
                   title: const Text("reviews"),
                 )
               : null,
